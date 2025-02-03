@@ -1,0 +1,41 @@
+﻿<h2>@Model.Name</h2>
+<p>@Model.Description</p>
+<p><strong>السعر:</strong> $@Model.Price</p>
+
+<h3>التقييمات:</h3>
+@if (Model.Reviews.Any())
+{
+    @foreach (var review in Model.Reviews)
+    {
+        <div class="review">
+            <p><strong>👤 @review.User.UserName</strong></p>
+            <p>⭐ @review.Rating</p>
+            <p>@review.Content</p>
+            <p><i>@review.Date.ToString("yyyy-MM-dd")</i></p>
+            @if (!string.IsNullOrEmpty(review.ImageUrl))
+            {
+                <img src="@review.ImageUrl" alt="صورة التقييم" width="150" />
+            }
+            <hr />
+        </div>
+    }
+}
+else
+{
+    <p>لا توجد تقييمات لهذا المنتج بعد.</p>
+}
+
+<h3>أضف تقييمك</h3>
+<form asp-action="Create" asp-controller="Review" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="productId" value="@Model.Id" />
+    <textarea name="content" required></textarea>
+    <select name="rating">
+        <option value="1">⭐</option>
+        <option value="2">⭐⭐</option>
+        <option value="3">⭐⭐⭐</option>
+        <option value="4">⭐⭐⭐⭐</option>
+        <option value="5">⭐⭐⭐⭐⭐</option>
+    </select>
+    <input type="file" name="imageFile" />
+    <button type="submit">إرسال التقييم</button>
+</form>
